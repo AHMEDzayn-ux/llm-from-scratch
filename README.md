@@ -1,8 +1,8 @@
-# LLM Foundations: From Raw Text to Transformer-Ready Embeddings
+# LLM Foundations: From Raw Text to Self-Attention
 
-This repository is a standalone, notebook-first learning path for students who want to understand how raw text becomes the numerical input to a GPT-style language model.
+This repository is a standalone, notebook-first learning path from raw text to the first self-attention calculations.
 
-The course emphasizes visible calculations, small experiments, printed shapes, plots, assertions, and questions you can answer before revealing the result. It intentionally stops before self-attention and Transformer architecture.
+The course emphasizes visible calculations, small experiments, plots, assertions, and questions you can answer before revealing the result. It currently stops after simplified self-attention without trainable attention parameters.
 
 ## Who this course is for
 
@@ -29,10 +29,16 @@ Positional embeddings
    ↓
 Final input embeddings [B, T, D]
    ↓
-Ready for the Transformer
+Why sequence positions must interact
+   ↓
+RNN → LSTM → Bahdanau attention
+   ↓
+Transformer and self-attention concepts
+   ↓
+Scores → softmax weights → context vectors
 ~~~
 
-Study the notebooks in numerical order:
+Study the notebooks in the order shown:
 
 | Step | Notebook | Main outcome | Prerequisite |
 |---:|---|---|---|
@@ -40,9 +46,11 @@ Study the notebooks in numerical order:
 | 2 | [Byte Pair Encoding from scratch](notebooks/02_bpe_from_scratch.ipynb) | Understand why subwords are useful, how BPE learns merges, how GPT-2 tokenization works, and how token streams become sliding training windows. | Notebook 1 |
 | 3 | [Token embeddings](notebooks/03_token_embeddings_demo.ipynb) | Understand why IDs are not semantic features, then learn embedding lookup tables, shapes, similarity, random initialization, and gradient-based learning. | Notebooks 1–2; PyTorch terms are introduced |
 | 4 | [Positional embeddings](notebooks/04_positional_embeddings_demo.ipynb) | Understand absolute and relative position, broadcasting, token-plus-position addition, and learned positional gradients. | Notebook 3 |
-| 5 | [Complete preprocessing pipeline](notebooks/05_llm_data_preprocessing_complete_pipeline.ipynb) | Rebuild and connect the entire path from custom raw text to final tensors shaped <code>[8, 4, 256]</code>. | Notebooks 1–4 recommended; direct-entry glossary included |
+| 5 | [Complete preprocessing pipeline](notebooks/05_llm_data_preprocessing_complete_pipeline.ipynb) | Rebuild and connect the entire path from custom raw text to final tensors shaped <code>[8, 4, 256]</code>. | Notebooks 1–4 recommended |
+| 6 | [Attention foundations](notebooks/attention_foundations_from_rnn_to_self_attention.ipynb) | Understand why attention emerged through RNNs, LSTMs, encoder–decoders, Bahdanau attention, and Transformers. | Notebook 5 |
+| 7 | [Simplified self-attention](notebooks/simplified_self_attention_from_scratch.ipynb) | Calculate direct dot-product scores, stable softmax weights, and context vectors for one query and a full sequence. | Notebook 6 |
 
-Notebook 5 is the capstone and reference notebook. It deliberately revisits earlier ideas, but it is most useful after completing the focused lessons.
+Notebook 5 is the preprocessing capstone. Notebooks 6–7 introduce attention conceptually and then numerically.
 
 ## Repository structure
 
@@ -55,7 +63,9 @@ Notebook 5 is the capstone and reference notebook. It deliberately revisits earl
     ├── 02_bpe_from_scratch.ipynb
     ├── 03_token_embeddings_demo.ipynb
     ├── 04_positional_embeddings_demo.ipynb
-    └── 05_llm_data_preprocessing_complete_pipeline.ipynb
+    ├── 05_llm_data_preprocessing_complete_pipeline.ipynb
+    ├── attention_foundations_from_rnn_to_self_attention.ipynb
+    └── simplified_self_attention_from_scratch.ipynb
 ~~~
 
 ## What you will understand
@@ -80,6 +90,8 @@ By the end, you should be able to explain:
 ~~~python
 input_embeddings = token_embeddings + positional_embeddings
 ~~~
+
+You will also understand the fixed-context bottleneck, how LSTM and attention solve different problems, what Bahdanau attention changed, and how simplified self-attention calculates scores, weights, and context vectors.
 
 ## Setup
 
@@ -193,13 +205,4 @@ Restart the kernel and run all cells in order. Notebook variables intentionally 
 
 ## Course boundary and next topics
 
-This repository ends when token and positional information have been combined into final input embeddings. Natural next topics are:
-
-1. dot products and attention scores;
-2. causal masking;
-3. scaled dot-product self-attention;
-4. multi-head attention;
-5. residual connections and layer normalization; and
-6. the complete Transformer block.
-
-Those topics are not implemented here, keeping this learning path focused and inspectable.
+This repository ends after simplified self-attention without trainable attention parameters. Natural next topics are trainable Query/Key/Value projections, scaled dot-product attention, causal masking, multi-head attention, and the complete Transformer block.
